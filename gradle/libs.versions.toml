@@ -1,0 +1,11 @@
+[versions]
+ktlint = "0.43.2"
+spotless = "6.5.2"
+dokka = "1.5.31"
+
+[libraries]
+ktlint = { module = "com.pinterest:ktlint", version.ref = "ktlint" }
+
+[plugins]
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
