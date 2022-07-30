@@ -6,4 +6,6 @@ kotlin {
 }
 
 dependencies {
+  implementation(libs.kotlinCoroutinesCore)
+  implementation(libs.unicorn)
 }

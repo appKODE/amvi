@@ -1,7 +1,4 @@
 import org.jetbrains.dokka.gradle.DokkaTask
-import org.jetbrains.kotlin.gradle.plugin.KotlinBasePlugin
-import org.jetbrains.kotlin.gradle.plugin.KotlinBasePluginWrapper
-import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformJvmPlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
 
 plugins {
@@ -10,13 +7,26 @@ plugins {
   alias(libs.plugins.spotless)
 }
 
+buildscript {
+  repositories {
+    google()
+    mavenCentral()
+  }
+}
+repositories {
+  google()
+  mavenCentral()
+}
+
 allprojects {
   buildscript {
     repositories {
+      google()
       mavenCentral()
     }
   }
   repositories {
+    google()
     mavenCentral()
   }
 }
@@ -65,7 +75,6 @@ subprojects {
           }
         }
       }
-
 
       publications.create<MavenPublication>("maven") {
         println("project ${project.name} publications: ${publications.size}")
