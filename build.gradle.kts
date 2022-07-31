@@ -67,11 +67,13 @@ subprojects {
       }
 
       publications.create<MavenPublication>("maven") {
-        println("project ${project.name} publications: ${publications.size}")
         val versionName: String by project
         val pomGroupId: String by project
         groupId = pomGroupId
         version = versionName
+
+        from(components["java"])
+
         pom {
           val pomDescription: String by project
           val pomUrl: String by project
