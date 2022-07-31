@@ -15,10 +15,9 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import ru.dimsuz.unicorn2.Machine
 
-abstract class ViewModel<VS : Any, VI : ViewIntents, VE : Any>(
+abstract class ViewModel<VS : Any, VI : ViewIntents>(
   dispatcher: CoroutineDispatcher = Dispatchers.Default,
   private val log: (() -> String) -> Unit = { lazyMessage -> println(lazyMessage()) },
 ) {
