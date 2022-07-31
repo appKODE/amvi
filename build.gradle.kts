@@ -7,17 +7,6 @@ plugins {
   alias(libs.plugins.spotless)
 }
 
-buildscript {
-  repositories {
-    google()
-    mavenCentral()
-  }
-}
-repositories {
-  google()
-  mavenCentral()
-}
-
 allprojects {
   buildscript {
     repositories {
@@ -28,6 +17,7 @@ allprojects {
   repositories {
     google()
     mavenCentral()
+    mavenLocal()
   }
 }
 
