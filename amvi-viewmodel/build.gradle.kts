@@ -5,8 +5,17 @@ plugins {
 kotlin {
 }
 
+tasks.withType<Test>().configureEach {
+  useJUnitPlatform()
+}
+
 dependencies {
   implementation(libs.kotlinCoroutinesCore)
   compileOnly(libs.composeRuntimeJvm) // for @Stable annotations
   implementation(libs.unicorn)
+
+  testImplementation(libs.koTestRunner)
+  testImplementation(libs.koTestAssertions)
+  testImplementation(libs.koTestProperty)
+  testImplementation(libs.turbine)
 }
