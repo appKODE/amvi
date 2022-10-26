@@ -2,7 +2,7 @@ import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
 
 plugins {
-  kotlin("jvm") version "1.7.10" apply false
+  kotlin("jvm") version "1.7.20" apply false
   alias(libs.plugins.dokka) apply false
   alias(libs.plugins.spotless)
 }
