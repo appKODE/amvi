@@ -119,13 +119,11 @@ abstract class ViewModel<VS : Any, VI : ViewIntents>(
     return binder.relay as Flow<I>
   }
 
-  @Suppress("UNCHECKED_CAST") // we actually know the type of payload
   @JvmName("intent1")
   fun <I : Any> intent(bindOp: (VI) -> UiIntentFactory1<I>): Flow<I> {
     return intentInternal(bindOp)
   }
 
-  @Suppress("UNCHECKED_CAST") // we actually know the type of payload
   @JvmName("intent0")
   fun intent(bindOp: (VI) -> UiIntentFactory0): Flow<Unit> {
     return intentInternal(bindOp)
