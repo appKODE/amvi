@@ -1,5 +1,6 @@
 package ru.kode.amvi.viewmodel
 
+import androidx.compose.runtime.Stable
 import java.util.UUID
 
 data class UiIntent internal constructor(
@@ -17,6 +18,7 @@ interface UiIntentFactory {
   override fun hashCode(): Int
 }
 
+@Stable
 class UiIntentFactory0 internal constructor(
   override val name: String,
   emit: (UiIntent) -> Unit,
@@ -44,6 +46,7 @@ class UiIntentFactory0 internal constructor(
   }
 }
 
+@Stable
 class UiIntentFactory1<T : Any> internal constructor(
   override val name: String,
   private val emit: (UiIntent) -> Unit,
