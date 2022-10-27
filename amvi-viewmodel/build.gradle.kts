@@ -12,7 +12,7 @@ tasks.withType<Test>().configureEach {
 dependencies {
   implementation(libs.kotlinCoroutinesCore)
   compileOnly(libs.composeRuntimeJvm) // for @Stable annotations
-  implementation(libs.unicorn)
+  api(libs.unicorn)
 
   testImplementation(libs.koTestRunner)
   testImplementation(libs.koTestAssertions)
