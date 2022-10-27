@@ -1,11 +1,11 @@
 package ru.kode.amvi.viewmodel
 
 import app.cash.turbine.test
-import io.kotest.assertions.fail
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onEach
 import ru.dimsuz.unicorn2.machine
@@ -86,11 +86,54 @@ class ViewModelTest : ShouldSpec({
   }
 
   should("not execute transitions in response to intent sources after detach") {
-    fail("todo")
+    val sut = object : ViewModel<List<Int>, TestIntents>(dispatcher = Dispatchers.Default) {
+      override fun buildMachine() = machine<List<Int>> {
+        initial = listOf(3) to null
+
+        onEach(intent(TestIntents::intentNoArg)) {
+          transitionTo { state, _ ->
+            state + 11
+          }
+        }
+      }
+    }
+
+    val intents = TestIntents()
+    sut.attach(intents)
+
+    sut.viewStateFlow.test {
+      awaitItem() shouldBe listOf(3)
+      sut.detach()
+      intents.intentNoArg()
+      delay(100)
+      expectNoEvents()
+    }
   }
 
-  should("not execute transitions in response to non-intent sources after detach") {
-    fail("todo")
+  should("continue to execute transitions in response to non-intent sources after detach") {
+    val events = MutableSharedFlow<Int>(extraBufferCapacity = 3)
+    val sut = object : ViewModel<List<Int>, TestIntents>(dispatcher = Dispatchers.Default) {
+      override fun buildMachine() = machine<List<Int>> {
+        initial = listOf(3) to null
+
+        onEach(events) {
+          transitionTo { state, payload ->
+            state + payload
+          }
+        }
+      }
+    }
+
+    sut.attach(TestIntents())
+
+    sut.viewStateFlow.test {
+      awaitItem() shouldBe listOf(3)
+      sut.detach()
+      events.emit(12)
+      awaitItem() shouldBe listOf(3, 12)
+      delay(100)
+      expectNoEvents()
+    }
   }
 })
 
