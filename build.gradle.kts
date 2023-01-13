@@ -5,6 +5,7 @@ plugins {
   kotlin("jvm") version "1.7.20" apply false
   alias(libs.plugins.dokka) apply false
   alias(libs.plugins.spotless)
+  alias(libs.plugins.composeDesktop) apply false
 }
 
 allprojects {
