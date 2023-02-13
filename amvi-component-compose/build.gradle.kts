@@ -12,4 +12,5 @@ tasks.withType<Test>().configureEach {
 
 dependencies {
   implementation(compose.desktop.currentOs)
+  api(project(":amvi-viewmodel"))
 }
