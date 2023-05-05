@@ -5,18 +5,20 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import ru.kode.amvi.viewmodel.ViewIntents
 import ru.kode.amvi.viewmodel.ViewModel
 
 @Composable
 fun <S : Any, I : ViewIntents> MviComponent(
-  presenter: ViewModel<S, I>,
+  viewModel: ViewModel<S, I>,
   intents: I,
   content: @Composable (state: S, intents: I) -> Unit,
 ) {
-  LifecycleEffect(presenter, intents)
-  val state by presenter.viewStateFlow.collectAsState()
+  LifecycleEffect(viewModel, intents)
+  val state by viewModel.viewStateFlow.collectAsState()
   content(state, intents)
 }
 
@@ -27,12 +29,14 @@ inline fun <reified VI : ViewIntents> rememberViewIntents(): VI {
 
 @Composable
 private fun <VI : ViewIntents, VM : ViewModel<*, VI>> LifecycleEffect(viewModel: VM, intents: VI) {
-  LaunchedEffect(Unit) {
+  var attachedViewModel by remember { mutableStateOf<ViewModel<*, *>?>(null) }
+  DisposableEffect(viewModel) {
+    attachedViewModel?.detach()
     viewModel.attach(intents)
-  }
-  DisposableEffect(Unit) {
+    attachedViewModel = viewModel
+
     onDispose {
-      viewModel.detach()
+      attachedViewModel?.detach()
     }
   }
 }
