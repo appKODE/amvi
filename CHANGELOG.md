@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.10.0 - Unreleased
+## 0.10.0 - 2026-11-08
 
 * Kotlin Multiplatform: `jvm`, `android`, `iosArm64`, `iosSimulatorArm64`, `iosX64` targets
 * Update to Kotlin 2.3.20, coroutines 1.10.2. Minimum JVM version is 11
