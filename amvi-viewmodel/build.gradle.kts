@@ -1,21 +1,114 @@
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-  kotlin("jvm")
+  id(libs.plugins.kotlinMultiplatform.get().pluginId)
+  id(libs.plugins.androidKmpLibrary.get().pluginId)
+  // KSP before Kotest: the Kotest plugin needs it to run specs on native
+  id(libs.plugins.ksp.get().pluginId)
+  id(libs.plugins.kotest.get().pluginId)
+  alias(libs.plugins.vanniktech.maven.publish)
 }
+
+group = providers.gradleProperty("pomGroupId").get()
+version = providers.gradleProperty("versionName").get()
 
 kotlin {
+  jvmToolchain(11)
+
+  jvm()
+
+  androidLibrary {
+    namespace = "ru.kode.amvi.viewmodel"
+    compileSdk = libs.versions.compileSdk.get().toInt()
+    minSdk = 21
+  }
+
+  iosArm64()
+  iosSimulatorArm64()
+  iosX64()
+
+  sourceSets {
+    // Kotest's KSP-generated native test runner uses kotlin.time.Clock
+    matching { it.name.endsWith("Test") }.configureEach {
+      languageSettings.optIn("kotlin.time.ExperimentalTime")
+    }
+    val commonMain by getting {
+      dependencies {
+        implementation(libs.bundles.coroutines)
+        api(libs.unicorn)
+        // for @Stable annotations
+        implementation(libs.composeRuntimeAnnotation)
+      }
+    }
+    val commonTest by getting {
+      dependencies {
+        implementation(libs.bundles.koTestCommon)
+        implementation(libs.turbine)
+      }
+    }
+    val jvmTest by getting {
+      dependencies {
+        implementation(libs.bundles.koTestJvm)
+      }
+    }
+  }
 }
 
-tasks.withType<Test>().configureEach {
+mavenPublishing {
+  coordinates(artifactId = "amvi-viewmodel")
+
+  publishToMavenCentral()
+  signAllPublications()
+
+  pom {
+    val pomName: String by project
+    val pomDescription: String by project
+    val pomUrl: String by project
+    val pomScmUrl: String by project
+    val pomScmConnection: String by project
+    val pomScmDevConnection: String by project
+    val pomLicenseName: String by project
+    val pomLicenseUrl: String by project
+    val pomLicenseDist: String by project
+    val pomDeveloperId: String by project
+    val pomDeveloperName: String by project
+
+    name.set(pomName)
+    description.set(pomDescription)
+    url.set(pomUrl)
+
+    scm {
+      url.set(pomScmUrl)
+      connection.set(pomScmConnection)
+      developerConnection.set(pomScmDevConnection)
+    }
+
+    licenses {
+      license {
+        name.set(pomLicenseName)
+        url.set(pomLicenseUrl)
+        distribution.set(pomLicenseDist)
+      }
+    }
+
+    developers {
+      developer {
+        id.set(pomDeveloperId)
+        name.set(pomDeveloperName)
+      }
+    }
+  }
+}
+
+tasks.named<Test>("jvmTest") {
   useJUnitPlatform()
-}
-
-dependencies {
-  implementation(libs.kotlinCoroutinesCore)
-  compileOnly(libs.composeRuntimeJvm) // for @Stable annotations
-  api(libs.unicorn)
-
-  testImplementation(libs.koTestRunner)
-  testImplementation(libs.koTestAssertions)
-  testImplementation(libs.koTestProperty)
-  testImplementation(libs.turbine)
+  testLogging {
+    showExceptions = true
+    showStandardStreams = true
+    events = setOf(
+      org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED,
+      org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED,
+      org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_OUT,
+    )
+    exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+  }
 }

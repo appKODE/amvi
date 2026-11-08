@@ -1,14 +1,22 @@
-
-rootProject.name = "amvi"
-
-include("amvi-viewmodel")
-include("amvi-component-compose")
-
 pluginManagement {
   repositories {
     gradlePluginPortal()
     google()
     mavenCentral()
-    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
   }
 }
+
+dependencyResolutionManagement {
+  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+  repositories {
+    google()
+    mavenCentral()
+    // TODO remove before release: ru.kode:unicorn2:2.3.0 is not on Maven Central yet
+    mavenLocal()
+  }
+}
+
+rootProject.name = "amvi"
+
+include(":amvi-viewmodel")
+include(":amvi-component-compose")

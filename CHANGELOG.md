@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.10.0 - Unreleased
+
+* Kotlin Multiplatform: `jvm`, `android`, `iosArm64`, `iosSimulatorArm64`, `iosX64` targets
+* Update to Kotlin 2.3.20, coroutines 1.10.2. Minimum JVM version is 11
+* Depend on unicorn `ru.kode:unicorn2:2.3.0` (new groupId, was `ru.dimsuz:unicorn2`)
+* Add common `rememberViewIntents(factory)`. The reified no-arg `rememberViewIntents()` stays on JVM and Android
+* `amvi-component-compose` depends only on Compose runtime (was Compose Desktop)
+* Publish via Maven Central Portal
+
 ## 0.9.1 - 2023-02-15
 
 * Fix bug with `ViewModel.attach` calls on a "leaked" view model object
