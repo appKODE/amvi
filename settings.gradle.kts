@@ -11,8 +11,6 @@ dependencyResolutionManagement {
   repositories {
     google()
     mavenCentral()
-    // TODO remove before release: ru.kode:unicorn2:2.3.0 is not on Maven Central yet
-    mavenLocal()
   }
 }
 
